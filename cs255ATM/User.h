@@ -16,8 +16,5 @@ public:
     void setPIN(int pin_);
     long double getBalance() ;
     void setBalance(long double balance_);
-    bool validID(string id);
-    bool validPIN(string pin);
-    bool existAccount(string id);
-    string generateID();
+    
 };
