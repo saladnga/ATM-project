@@ -36,7 +36,9 @@ void User::setBalance(long double balance_){
     this->balance = balance_;
 }
 
-
+void User::add_Friend(string friendID){
+    friendsID.push_back(friendID);
+}
 
 
 

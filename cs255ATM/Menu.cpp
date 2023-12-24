@@ -120,10 +120,125 @@ bool Menu::validPIN(string pin){
         return true;
 }
 
-void Menu::ATM_Menu(){
-    cout << "1.Account Information" << endl;
-    cout << "2.Withdraw money" << endl;
-    cout << "3.Deposit money" << endl;
-    cout << "4.Transfer money" << endl;
-    cout << "5.Log out" << endl;
+bool Menu::existAccount(string id){
+    ifstream fi(id+".txt");
+    return fi.good();
 }
+
+void Menu::ATM_Menu(){
+    while(true){
+        int choice;
+        cout << "1.Account Information" << endl;
+        cout << "2.Withdraw money" << endl;
+        cout << "3.Deposit money" << endl;
+        cout << "4.Transfer money" << endl;
+        cout << "5.Log out" << endl;
+        cout << "What is your option: " ;
+        cin >> choice;
+        if(choice == 1){
+            cout << "Your Account information" << endl;
+            ShowInfo();
+            continue;
+        }
+
+        else if(choice == 2){
+            while(true){
+                User* user;
+                cout << "What is the amount of money you want to withdraw? ";
+                long double money;
+                cin >> money;
+                if(user->getBalance() < money){
+                    cout << "You do not have enough money!" << endl;
+                    break;
+                }
+                else Withdraw_money(money);
+            }
+            continue;
+        }
+
+        else if(choice == 3){
+            while(true){
+                User* user;
+                cout << "What is the amount of money you want to deposit? ";
+                long double money;
+                cin >> money;
+                Deposit_money(money);
+            }
+            continue;
+        }
+
+        else if(choice == 4){
+            cin.ignore();
+            while(true){
+                cout << "Who do you want to transfer money to? ";
+                string friendID;
+                getline(cin,friendID);
+                if(existAccount(friendID)){
+                    Transfer_money();
+                    cout << "Do you want to"
+                }
+                else{
+                    cout << "This account does not exist, please check again!";
+                    continue;
+                }
+            }
+            continue;
+        }
+        else if(choice == 5){
+            break;
+            mainMenu();
+        }
+        else{
+            cout << "Choose again, please!" << endl;
+            continue;
+        }
+    }
+}
+
+void Menu::update(){
+    User* user;
+    ofstream outFi(user->getID() + ".txt");
+    outFi << user->getPIN() << endl;
+    outFi << user->getBalance() << endl;
+    outFi.close();
+}
+
+void Menu::ShowInfo(){
+    User* user;
+    ifstream inFi(user->getID() + ".txt");
+    string pin, balance;
+    getline(inFi,pin);
+    cout << "PIN numbers: " << pin << endl;
+    getline(inFi,balance);
+    cout << "Balance: " << balance << endl;
+    inFi.close();
+}
+
+void Menu::Withdraw_money(long double money){
+    User* user;
+    user->setBalance(user->getBalance() - money);
+    update();
+}
+
+void Menu::Deposit_money(long double money){
+    User* user;
+    user->setBalance(user->getBalance() + money);
+    update();
+}
+
+void Menu::Transfer_money(){
+    cin.ignore();
+    cout << "Who do you want to transfer money to? ";
+    string friendID;
+    getline(cin,friendID);
+    
+}
+
+
+
+
+
+
+
+
+
