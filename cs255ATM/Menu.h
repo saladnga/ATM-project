@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include"User.h"
 using namespace std;
 
 class Menu{
@@ -15,7 +16,7 @@ public:
     void ShowInfo();
     void Withdraw_money(long double money);
     void Deposit_money(long double money);
-    void Transfer_money();
+    void Transfer_money(string friendID, long double money);
     void update();
     ~Menu();
 };

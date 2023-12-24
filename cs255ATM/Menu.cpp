@@ -3,6 +3,11 @@
 #include"User.h"
 using namespace std;
 
+
+Menu::Menu(){
+    //Constructor Implementation
+}
+
 void Menu::mainMenu(){
     while(true){
         int option;
@@ -151,7 +156,11 @@ void Menu::ATM_Menu(){
                     cout << "You do not have enough money!" << endl;
                     break;
                 }
-                else Withdraw_money(money);
+                else {
+                    Withdraw_money(money);
+                    cout << "Withdraw money successfully" << endl;
+                    break;
+                }
             }
             continue;
         }
@@ -163,19 +172,49 @@ void Menu::ATM_Menu(){
                 long double money;
                 cin >> money;
                 Deposit_money(money);
+                cout << "Deposit money successfully" << endl;
+                break;
             }
             continue;
         }
 
         else if(choice == 4){
+            User* user;
             cin.ignore();
             while(true){
                 cout << "Who do you want to transfer money to? ";
                 string friendID;
                 getline(cin,friendID);
                 if(existAccount(friendID)){
-                    Transfer_money();
-                    cout << "Do you want to"
+                    while(true){
+                        long double money;
+                        cout << "What is the amount of money you want to transfer? ";
+                        cin >> money;
+                        if(user->getBalance() < money){
+                            cout << "You do not have enough money!" << endl;
+                            break;
+                        }
+                        else {
+                            Transfer_money(friendID,money);
+                            cout << "Transfer money successfully" << endl;
+                            break;
+                        }
+                    }
+                    if(!user->isFriend(friendID)){
+                        while(true){
+                            string ans;
+                            cout << "Do you want to add friend?(y/n) ";
+                            getline(cin,ans);
+                            if(ans == "y"){
+                                user->add_Friend(friendID);
+                                break;
+                            }
+                            else if(ans == "n"){
+                                break;
+                            }
+                            else continue;
+                        }
+                    }
                 }
                 else{
                     cout << "This account does not exist, please check again!";
@@ -226,17 +265,27 @@ void Menu::Deposit_money(long double money){
     update();
 }
 
-void Menu::Transfer_money(){
-    cin.ignore();
-    cout << "Who do you want to transfer money to? ";
-    string friendID;
-    getline(cin,friendID);
-    
+void Menu::Transfer_money(string friendID, long double money){
+    User* user;
+    user->setBalance(user->getBalance() - money);
+    update();
+    string friend_id;
+    string friend_balance;
+    ifstream inFi(friendID + ".txt");
+    inFi >> friend_id;
+    inFi >> friend_balance;
+    friend_balance += money;
+    inFi.close();
+    ofstream outFi(friendID + ".txt");
+    outFi << friend_id << endl;
+    outFi << friend_balance << endl;
+    outFi.close();
 }
 
 
-
-
+Menu::~Menu(){
+    // Destructor Implementation
+}
 
 
 
