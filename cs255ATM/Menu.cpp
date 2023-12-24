@@ -81,7 +81,8 @@ void Menu::Register(){
     long double balance = 0;
 
     ofstream outFi(new_id+".txt");
-    outFi << pin << " " << balance;
+    outFi << pin << endl;
+    outFi << balance << endl;
     outFi.close();
 }
 
