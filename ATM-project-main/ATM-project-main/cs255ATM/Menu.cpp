@@ -136,6 +136,10 @@ void Menu::ATM_Menu(){
                     cout << "You do not have enough money!" << endl;
                     break;
                 }
+                else if(money <= 0){
+                    cout << "Invalid money!" << endl;
+                    break;
+                }
                 else {
                     this->user->Withdraw_money(money);
                     cout << "Withdraw money successfully" << endl;
@@ -160,14 +164,14 @@ void Menu::ATM_Menu(){
         else if(choice == 4){
             vector<string>listFriend = user->getFriends();
             for(int i = 0; i< listFriend.size(); i++){
-                cout << listFriend[i] << endl;
+                cout << i+1 <<"." << listFriend[i] << endl;
             }
             cin.ignore();
             while(true){
                 cout << "Who do you want to transfer money to? ";
                 string friendID;
                 getline(cin,friendID);
-                if(this->user->existAccount(friendID)){
+                if(this->user->existAccount(friendID) || friendID != user->getID()){
                     while(true){
                         long double money;
                         cout << "What is the amount of money you want to transfer? ";
