@@ -152,7 +152,6 @@ bool Menu::existAccount(string id){
 }
 
 void Menu::ATM_Menu(){
-    User user(string id);
     while(true){
         int choice;
         cout << "1.Account Information" << endl;
@@ -170,11 +169,11 @@ void Menu::ATM_Menu(){
 
         else if(choice == 2){
             while(true){
-                User* user;
                 cout << "What is the amount of money you want to withdraw? ";
                 long double money;
                 cin >> money;
-                if(user->getBalance() < money){
+                long double value = user->getBalance();
+                if(value <= money){
                     cout << "You do not have enough money!" << endl;
                     break;
                 }
@@ -189,7 +188,6 @@ void Menu::ATM_Menu(){
 
         else if(choice == 3){
             while(true){
-                User* user;
                 cout << "What is the amount of money you want to deposit? ";
                 long double money;
                 cin >> money;
@@ -257,10 +255,8 @@ void Menu::ATM_Menu(){
 }
 
 void Menu::update(){
-    User user(currentID);
-    ofstream outFi(user.getID() + ".txt");
-    outFi << user.getPIN() << endl;
-    outFi << user.getBalance() << endl;
+    ofstream outFi(user->getID() + ".txt");
+    outFi << user->getPIN() << " " << user->getBalance() << endl;
     outFi.close();
 }
 
@@ -282,23 +278,20 @@ void Menu::ShowInfo(){
     
     cout << "PIN numbers: " << user->getPIN() << endl;
     /*getline(inFi,balance);*/
-    cout << "Balance: " << user-> getBalance() << endl;
+    cout << "Balance: " << user->getBalance() << endl;
 }
 
 void Menu::Withdraw_money(long double money){
-    User* user;
     user->setBalance(user->getBalance() - money);
     update();
 }
 
 void Menu::Deposit_money(long double money){
-    User* user;
     user->setBalance(user->getBalance() + money);
     update();
 }
 
 void Menu::Transfer_money(string friendID, long double money){
-    User* user;
     user->setBalance(user->getBalance() - money);
     update();
     string friend_id;
