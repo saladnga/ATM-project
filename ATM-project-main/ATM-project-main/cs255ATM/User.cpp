@@ -129,6 +129,31 @@ bool User::existAccount(string id){
     return fi.good();
 }
 
+void User::Withdraw_money(long double money){
+    setBalance(getBalance() - money);
+    update();
+}
+
+void User::Deposit_money(long double money){
+    setBalance(getBalance() + money);
+    update();
+}
+
+void User::Transfer_money(string friendID, long double money){
+    setBalance(getBalance() - money);
+    update();
+    string friend_id;
+    long double friend_balance;
+    ifstream inFi(friendID + ".txt");
+    inFi >> friend_id;
+    inFi >> friend_balance;
+    friend_balance += money;
+    inFi.close();
+    ofstream outFi(friendID + ".txt");
+    outFi << friend_id << " " << friend_balance << endl; 
+    outFi.close();
+}
+
 User::~User(){
 }
 

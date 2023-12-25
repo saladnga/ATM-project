@@ -32,6 +32,9 @@ public:
     bool existAccount(string id);
     void add_Friend(string friendID);
     bool isFriend(string friendID);
+    void Withdraw_money(long double money);
+    void Deposit_money(long double money);
+    void Transfer_money(string friendID, long double money);
     void update();
     ~User();
 };

@@ -32,7 +32,6 @@ void Menu::mainMenu(){
         cin >> option;
         if(option == 1){
             Login();
-            cout << "Login successfully!" << endl;
         }
         else if(option == 2){
             Register();
@@ -74,6 +73,7 @@ void Menu::Login(){
     }
 
     fi.close();
+    cout << "Login successfully!" << endl;
     
     this->user = &iUser;
     ATM_Menu();
@@ -137,7 +137,7 @@ void Menu::ATM_Menu(){
                     break;
                 }
                 else {
-                    Withdraw_money(money);
+                    this->user->Withdraw_money(money);
                     cout << "Withdraw money successfully" << endl;
                     break;
                 }
@@ -150,7 +150,7 @@ void Menu::ATM_Menu(){
                 cout << "What is the amount of money you want to deposit? ";
                 long double money;
                 cin >> money;
-                Deposit_money(money);
+                this->user->Deposit_money(money);
                 cout << "Deposit money successfully" << endl;
                 break;
             }
@@ -176,8 +176,12 @@ void Menu::ATM_Menu(){
                             cout << "You do not have enough money!" << endl;
                             break;
                         }
+                        else if(money <= 0 || !isdigit(money)){
+                            cout << "Invalid money!" << endl;
+                            break;
+                        }
                         else {
-                            Transfer_money(friendID,money);
+                            this->user->Transfer_money(friendID,money);
                             cout << "Transfer money successfully" << endl;
                             break;
                         }
@@ -237,31 +241,6 @@ void Menu::ShowInfo(){
     for (int i = 0; i < listFriends.size(); i++){
         cout << " - " << listFriends[i] << endl;
     }
-}
-
-void Menu::Withdraw_money(long double money){
-    user->setBalance(user->getBalance() - money);
-    user->update();
-}
-
-void Menu::Deposit_money(long double money){
-    user->setBalance(user->getBalance() + money);
-    user->update();
-}
-
-void Menu::Transfer_money(string friendID, long double money){
-    user->setBalance(user->getBalance() - money);
-    user->update();
-    string friend_id;
-    long double friend_balance;
-    ifstream inFi(friendID + ".txt");
-    inFi >> friend_id;
-    inFi >> friend_balance;
-    friend_balance += money;
-    inFi.close();
-    ofstream outFi(friendID + ".txt");
-    outFi << friend_id << " " << friend_balance << endl; 
-    outFi.close();
 }
 
 

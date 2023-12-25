@@ -20,8 +20,5 @@ public:
     void Register();
     void ATM_Menu();
     void ShowInfo();
-    void Withdraw_money(long double money);
-    void Deposit_money(long double money);
-    void Transfer_money(string friendID, long double money);
     ~Menu();
 };
