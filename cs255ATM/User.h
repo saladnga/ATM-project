@@ -14,11 +14,12 @@ private:
     string id;
     string pin;
     long double balance;
+    vector<string> friendsID ;
 public:
-    vector<string> friendsID;
     User();
     User(string id_, string pin_ , long double balance_);
     User(string id_);
+    vector<string> getFriends();
     string getID() const;
     void setID(string id_);
     string getPIN() const;
@@ -27,5 +28,6 @@ public:
     void setBalance(long double balance_);
     void add_Friend(string friendID);
     bool isFriend(string friendID);
+    void update();
     ~User();
 };

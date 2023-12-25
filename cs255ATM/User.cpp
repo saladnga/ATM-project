@@ -21,9 +21,15 @@ User::User(string id_, string pin_, long double balance_){
 User::User(string id_){
     this->id = id_;
     ifstream inFi(id_+".txt");
-    getline(inFi,this->id);
-    string balance;
-    getline(inFi,balance);
+    //getline(inFi,this->id);
+    inFi>>this->pin;
+    //getline(inFi,balance);
+    inFi>>this->balance;
+    string friendID;
+    while (inFi >> friendID) {
+        this->friendsID.push_back(friendID);
+    }
+    cout<<friendsID.size()<<endl;
 }
 
 string User:: getID() const{
@@ -50,13 +56,34 @@ void User::setBalance(long double balance_){
     this->balance = balance_;
 }
 
+vector<string> User::getFriends(){
+    return this->friendsID;
+}
+
+void User::update(){
+    ofstream outFi(getID() + ".txt");
+    outFi << getPIN() << " " << getBalance() << endl;
+    for(int i = 0; i < getFriends().size(); i++){
+        outFi << getFriends()[i] << endl;
+    }
+    outFi.close();
+}
+
 void User::add_Friend(string friendID){
-    friendsID.push_back(friendID);
+    for (int i = 0; i < friendsID.size(); i++)
+    {
+        if (friendsID[i] == friendID)
+            return;
+    }
+    this->friendsID.push_back(friendID);
+    update();
+
+    // this->friendsID.push_back(friendID);
 }
 
 bool User:: isFriend(string friendID){
     for(int i = 0; i < friendsID.size();i++){
-        if(friendID == friendsID[i]){
+        if(friendsID[i] == friendID){
             return true;
         }
     }

@@ -33,7 +33,7 @@ void Menu::mainMenu(){
         if(option == 1){
             Login();
             cout << "Login successfully!" << endl;
-            ATM_Menu();
+            //ATM_Menu();
         }
         else if(option == 2){
             Register();
@@ -62,21 +62,27 @@ void Menu::Login(){
         mainMenu();
         return;
     }
-    
-    else{
+    fi.close();
+    User iUser(id);
+    //else
+    {
         cout << "Enter your 6-digit PIN numbers: ";
         getline(cin, pin);
-        string truePIN;
-        fi >> truePIN;
+        string truePIN= iUser.getPIN();
+        //fi >> truePIN;
         if(pin != truePIN){
             cout << "Invalid PIN" << endl;
             mainMenu();
             return;
         }
     }
-    double balance;
-    fi >> balance;
-    user = new User(id, pin, balance);
+    this->user = &iUser;
+
+    //ShowInfo();
+    ATM_Menu();
+    //double balance;
+    //fi >> balance;
+    //¯user = new User(id, pin, balance);
 }
 
 void Menu::Register(){
@@ -167,7 +173,7 @@ void Menu::ATM_Menu(){
             continue;
         }
 
-        else if(choice == 2){
+        if(choice == 2){
             while(true){
                 cout << "What is the amount of money you want to withdraw? ";
                 long double money;
@@ -199,6 +205,10 @@ void Menu::ATM_Menu(){
         }
 
         else if(choice == 4){
+            vector<string>listFriend = user->getFriends();
+            for(int i = 0; i< listFriend.size(); i++){
+                cout << listFriend[i] << endl;
+            }
             cin.ignore();
             while(true){
                 cout << "Who do you want to transfer money to? ";
@@ -257,35 +267,49 @@ void Menu::ATM_Menu(){
     }
 }
 
-void Menu::update(){
-    ofstream outFi(user->getID() + ".txt");
-    outFi << user->getPIN() << " " << user->getBalance() << endl;
-    outFi.close();
-}
+// void Menu::update(){
+//     ofstream outFi(user->getID() + ".txt");
+//     outFi << user->getPIN() << " " << user->getBalance() << endl;
+//     for(int i = 0; i < user->getFriends().size(); i++){
+//         outFi << user->getFriends()[i] << endl;
+//     }
+//     outFi.close();
+// }
 
 void Menu::ShowInfo(){
-    ifstream inFi(user->getID() + ".txt");
-    string truePIN;
-    long double balance;
-    inFi >> truePIN;
-    inFi >> balance;
-    cout << "PIN numbers: " << user->getPIN() << endl;
-    cout << "Balance: " << user->getBalance() << endl;
+    //ifstream inFi(user->getID() + ".txt");
+    //string truePIN;
+    //long double balance;
+    vector<string> listFriends = this->user->getFriends();
+    //inFi >> truePIN;
+    //inFi >> balance;
+    cout << "PIN numbers: " << this->user->getPIN() << endl;
+    cout << "Balance: " << this->user->getBalance() << endl;
+    cout << "Friends:";
+    if (listFriends.size() == 0){
+        cout << "[]\n";
+    }
+    else{
+        cout << "\n";
+    }
+    for (int i = 0; i < listFriends.size(); i++){
+        cout << " - " << listFriends[i] << endl;
+    }
 }
 
 void Menu::Withdraw_money(long double money){
     user->setBalance(user->getBalance() - money);
-    update();
+    user->update();
 }
 
 void Menu::Deposit_money(long double money){
     user->setBalance(user->getBalance() + money);
-    update();
+    user->update();
 }
 
 void Menu::Transfer_money(string friendID, long double money){
     user->setBalance(user->getBalance() - money);
-    update();
+    user->update();
     string friend_id;
     long double friend_balance;
     ifstream inFi(friendID + ".txt");
@@ -298,6 +322,86 @@ void Menu::Transfer_money(string friendID, long double money){
     outFi.close();
 }
 
+
+
+void Menu::Transfer_menu(){
+    cout << "1.Transfer to friend account"<< endl;
+    cout <<"2.Transfer to guest account" << endl;
+    cout << "Choose 1 or 2? " << endl;
+    int choice;
+    cin >> choice;
+    while(true){
+        cout << "1.Transfer to friend account"<< endl;
+        cout <<"2.Transfer to guest account" << endl;
+        cout << "Choose 1 or 2? " << endl;
+        int choice;
+        cin >> choice;
+        if(choice == 1){
+            Transfer_friend();
+            break;
+        }
+        else if(choice == 2){
+            Transfer_guest();
+            break;
+        }
+        else continue;
+    }
+}
+
+
+void Menu::Transfer_friend(){
+    cin.ignore();
+    string friendID;
+    while(true){
+        cout << "Enter your friend ID: ";
+        getline(cin,friendID);
+        if(!user->isFriend(friendID)){
+            cout << "Invalid username ID" << endl;
+            Transfer_menu();
+        }
+        else{
+            break;
+        }
+    }
+
+    while(true){
+        long double money;
+        cout << "What is the amount of money you want to transfer? ";
+        cin >> money;
+        if(user->getBalance() < money){
+            cout << "You do not have enough money!" << endl;
+            ATM_Menu();
+            break;
+        }
+        else {
+            Transfer_money(friendID,money);
+            cout << "Transfer money successfully" << endl;
+            ATM_Menu();
+            break;
+        }
+    }
+}
+
+
+void Menu::Transfer_guest(){
+    string friendID;
+    while(true){
+        long double money;
+        cout << "What is the amount of money you want to transfer? ";
+        cin >> money;
+        if(user->getBalance() < money){
+            cout << "You do not have enough money!" << endl;
+            ATM_Menu();
+            break;
+        }
+        else {
+            Transfer_money(friendID,money);
+            cout << "Transfer money successfully" << endl;
+            ATM_Menu();
+            break;
+        }
+    }
+}
 
 Menu::~Menu(){
     // Destructor Implementation

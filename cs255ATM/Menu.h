@@ -11,7 +11,6 @@
 using namespace std;
 
 class Menu{
-private:
 public:
     User* user; 
     Menu();
@@ -28,6 +27,9 @@ public:
     void Withdraw_money(long double money);
     void Deposit_money(long double money);
     void Transfer_money(string friendID, long double money);
-    void update();
+    void Transfer_friend();
+    void Transfer_guest();
+    void Transfer_menu();
+    // void update();
     ~Menu();
 };
