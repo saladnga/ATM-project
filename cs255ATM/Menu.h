@@ -1,10 +1,21 @@
-#include<bits/stdc++.h>
-#include"User.h"
+#include<iostream>
+#include<string>
+#include<cmath>
+#include<ctime>
+#include<random>
+#include<fstream>
+#include<cstdlib>
+#pragma once
+#include "User.h"
+
 using namespace std;
 
 class Menu{
+private:
+    User* user;
 public:
     Menu();
+    string CurrentID(string id);
     void mainMenu();
     void Login();
     void Register();

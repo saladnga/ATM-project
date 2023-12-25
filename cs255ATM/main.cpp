@@ -1,4 +1,11 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<string>
+#include<cmath>
+#include<ctime>
+#include<random>
+#include<fstream>
+#include<cstdlib>
+
 #include"Menu.cpp"
 #include"User.cpp"
 using namespace std;

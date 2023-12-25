@@ -1,4 +1,11 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<string>
+#include<cmath>
+#include<ctime>
+#include<random>
+#include<fstream>
+#include<cstdlib>
+
 #include"Menu.h"
 #include"User.h"
 using namespace std;
@@ -7,6 +14,13 @@ using namespace std;
 Menu::Menu(){
     //Constructor Implementation
 }
+
+string Menu::CurrentID(string id){
+    User user(id);
+    return user.getID();
+}
+
+string currentID;
 
 void Menu::mainMenu(){
     while(true){
@@ -59,6 +73,7 @@ void Menu::Login(){
             mainMenu();
         }
     }
+    currentID = id;
 
 }
 
@@ -66,7 +81,9 @@ void Menu::Register(){
     cin.ignore();
     string new_id = generateID();
     cout << "Your new ID: " + new_id << endl;
+    User user(new_id);
     string pin;
+    long double balance = 0;
     while(true){
         cout << "Enter your new 6-digit PIN numbers: ";
         getline(cin,pin);
@@ -74,15 +91,16 @@ void Menu::Register(){
             continue;
         }
         else {
+            user.setPIN(pin);
+            user.setBalance(balance);
             break;
         }
     }
-
-    long double balance = 0;
+    cout << user.getPIN() << endl;
+    cout << user.getBalance() << endl;
 
     ofstream outFi(new_id+".txt");
-    outFi << pin << endl;
-    outFi << balance << endl;
+    outFi << pin << " " << balance;
     outFi.close();
 }
 
@@ -132,6 +150,7 @@ bool Menu::existAccount(string id){
 }
 
 void Menu::ATM_Menu(){
+    User user(string id);
     while(true){
         int choice;
         cout << "1.Account Information" << endl;
@@ -236,22 +255,31 @@ void Menu::ATM_Menu(){
 }
 
 void Menu::update(){
-    User* user;
-    ofstream outFi(user->getID() + ".txt");
-    outFi << user->getPIN() << endl;
-    outFi << user->getBalance() << endl;
+    User user(currentID);
+    ofstream outFi(user.getID() + ".txt");
+    outFi << user.getPIN() << endl;
+    outFi << user.getBalance() << endl;
     outFi.close();
 }
 
 void Menu::ShowInfo(){
-    User* user;
-    ifstream inFi(user->getID() + ".txt");
+    /*ifstream inFi(user->getID() + ".txt");
     string pin, balance;
     getline(inFi,pin);
+    inFi >> pin;
+    inFi >> balance;
     cout << "PIN numbers: " << pin << endl;
     getline(inFi,balance);
     cout << "Balance: " << balance << endl;
-    inFi.close();
+    inFi.close();*/
+    User user(currentID);
+    cout << user.getPIN() << endl;
+    cout << user.getBalance() << endl;
+    cout << currentID << endl;
+    long double balance = user.getBalance();
+    cout << "PIN numbers: " << endl;
+    /*getline(inFi,balance);*/
+    cout << "Balance: " << endl;
 }
 
 void Menu::Withdraw_money(long double money){
