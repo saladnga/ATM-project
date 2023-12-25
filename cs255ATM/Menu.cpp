@@ -199,7 +199,6 @@ void Menu::ATM_Menu(){
         }
 
         else if(choice == 4){
-            User* user;
             cin.ignore();
             while(true){
                 cout << "Who do you want to transfer money to? ";
@@ -222,19 +221,23 @@ void Menu::ATM_Menu(){
                     }
                     if(!user->isFriend(friendID)){
                         while(true){
+                            cin.ignore();
                             string ans;
                             cout << "Do you want to add friend?(y/n) ";
                             getline(cin,ans);
                             if(ans == "y"){
                                 user->add_Friend(friendID);
-                                break;
+                                cout << "Add friend successfully!" << endl;
+                                return;
                             }
                             else if(ans == "n"){
-                                break;
+                                return;
                             }
                             else continue;
                         }
                     }
+
+                    else break;
                 }
                 else{
                     cout << "This account does not exist, please check again!";
@@ -261,23 +264,12 @@ void Menu::update(){
 }
 
 void Menu::ShowInfo(){
-    /*ifstream inFi(user->getID() + ".txt");
-    string pin, balance;
-    getline(inFi,pin);
-    inFi >> pin;
-    inFi >> balance;
-    cout << "PIN numbers: " << pin << endl;
-    getline(inFi,balance);
-    cout << "Balance: " << balance << endl;
-    inFi.close();*/
     ifstream inFi(user->getID() + ".txt");
     string truePIN;
     long double balance;
     inFi >> truePIN;
     inFi >> balance;
-    
     cout << "PIN numbers: " << user->getPIN() << endl;
-    /*getline(inFi,balance);*/
     cout << "Balance: " << user->getBalance() << endl;
 }
 
@@ -295,15 +287,14 @@ void Menu::Transfer_money(string friendID, long double money){
     user->setBalance(user->getBalance() - money);
     update();
     string friend_id;
-    string friend_balance;
+    long double friend_balance;
     ifstream inFi(friendID + ".txt");
     inFi >> friend_id;
     inFi >> friend_balance;
     friend_balance += money;
     inFi.close();
     ofstream outFi(friendID + ".txt");
-    outFi << friend_id << endl;
-    outFi << friend_balance << endl;
+    outFi << friend_id << " " << friend_balance << endl; 
     outFi.close();
 }
 
@@ -311,8 +302,5 @@ void Menu::Transfer_money(string friendID, long double money){
 Menu::~Menu(){
     // Destructor Implementation
 }
-
-
-
 
 
