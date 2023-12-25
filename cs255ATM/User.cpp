@@ -9,7 +9,6 @@
 #include "User.h"
 
 User::User(){
-    //Constructor Implementation
 }
 
 
@@ -65,7 +64,6 @@ bool User:: isFriend(string friendID){
 }
 
 User::~User(){
-    //Destructor Implementation
 }
 
 

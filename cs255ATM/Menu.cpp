@@ -12,7 +12,6 @@ using namespace std;
 
 
 Menu::Menu(){
-    //Constructor Implementation
 }
 
 string Menu::CurrentID(string id){
@@ -55,26 +54,29 @@ void Menu::Login(){
     cin.ignore();
     cout << "Enter your ID: ";
     string id;
+    string pin;
     getline(cin,id);
     ifstream fi(id+".txt");
     if(!fi){
         cout << "Invalid ID" << endl;
         mainMenu();
+        return;
     }
     
     else{
         cout << "Enter your 6-digit PIN numbers: ";
-        string pin;
         getline(cin, pin);
         string truePIN;
         fi >> truePIN;
         if(pin != truePIN){
             cout << "Invalid PIN" << endl;
             mainMenu();
+            return;
         }
     }
-    currentID = id;
-
+    double balance;
+    fi >> balance;
+    user = new User(id, pin, balance);
 }
 
 void Menu::Register(){
@@ -272,14 +274,15 @@ void Menu::ShowInfo(){
     getline(inFi,balance);
     cout << "Balance: " << balance << endl;
     inFi.close();*/
-    User user(currentID);
-    cout << user.getPIN() << endl;
-    cout << user.getBalance() << endl;
-    cout << currentID << endl;
-    long double balance = user.getBalance();
-    cout << "PIN numbers: " << endl;
+    ifstream inFi(user->getID() + ".txt");
+    string truePIN;
+    long double balance;
+    inFi >> truePIN;
+    inFi >> balance;
+    
+    cout << "PIN numbers: " << user->getPIN() << endl;
     /*getline(inFi,balance);*/
-    cout << "Balance: " << endl;
+    cout << "Balance: " << user-> getBalance() << endl;
 }
 
 void Menu::Withdraw_money(long double money){

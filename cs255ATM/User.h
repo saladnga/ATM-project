@@ -14,8 +14,7 @@ private:
     string id;
     string pin;
     long double balance;
-    vector<string>friendsID;
-    
+    vector<string> friendsID;
 public:
     User();
     User(string id_, string pin_ , long double balance_);

@@ -12,8 +12,8 @@ using namespace std;
 
 class Menu{
 private:
-    User* user;
 public:
+    User* user; 
     Menu();
     string CurrentID(string id);
     void mainMenu();
